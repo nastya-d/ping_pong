@@ -41,10 +41,17 @@ class Platform(GameSprite):
             self.rect.y += self.speed
 
 # экземпляры
-ball = GameSprite('ball.png', 20, 40, 50, 50, 0)
+ball = GameSprite('ball.png', 60, 40, 50, 50, 0)
 platform1 = Platform('platform.png', 650, 250, 20, 100, 5)
 platform2 = Platform('platform.png', 50, 250, 20, 100, 5)
 
+# надписи
+font.init()
+font = font.Font(None, 75)
+win1 = font.render('Игрок 1 победил!', True, (0, 0, 0))
+win2 = font.render('Игрок 2 победил!', True, (0, 0, 0))
+
+# константы
 game = True
 finish = False
 move_x = 3
@@ -54,8 +61,6 @@ while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-
-
 
     if finish != True:
         window.blit(back, (0, 0))
@@ -72,7 +77,21 @@ while game:
         platform1.reset()
         platform2.reset()
                 
-        
+        if ball.rect.colliderect(platform1.rect):
+            move_x *= -1
+
+        if ball.rect.colliderect(platform2.rect):
+            move_x *= -1
+
+        if ball.rect.x < 50:
+            finish = True
+            window.blit(win1, (150, 200))
+
+        if ball.rect.x > 650:
+            finish = True
+            window.blit(win2, (150, 200))
+
+
 
     display.update()
     clock.tick(60)
